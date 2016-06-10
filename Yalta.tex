@@ -31,7 +31,8 @@
 %\usepackage{graphicx}
 \graphicspath{{Figures/}}
 
-
+\newcommand{\suml}{\sum\limits}
+\newcommand{\intl}{\int\limits}
 
 \title{Моделирование разрушения жидкого кубика методом SPH}
 \author{М.Н. Давыдов}
@@ -50,7 +51,47 @@
 В работе численно исследуется задача о разрушении жидкого кубика, внутри которого имеется полость с высоким давлением, с использованием метода SPH (Smoothed Particle Hydrodynamics)~\cite{Monaghan2005}. 
 \end{abstract}
 
+\section{SPH method}
 
+The smoothed particle hydrodynamics (SPH) method~\cite{Monaghan1992,Monaghan2005} is an effective meshless Lagrangian numerical
+method used to calculate flow structures with an unknown free boundary, in particular, high-velocity processes in
+media with the modeled object topology appreciably changed under intense dynamic loading.
+
+In this method, $N$ spherical particles are placed into the modeled physical space. Each particle has a
+mass $m_i$, internal energy $e_i$, and velocity $\vec{v}_i$. The particles move in accordance with the laws of mechanics. If these
+physical quantities are known at a certain time at all points $j = 1,\ldots{},N$ to which $N$ particles are placed, i.e., if
+a certain function $f(r_j)$ is specified, then its value at an arbitrary point of the modeled space can be obtained by
+means of discretization of the interpolation formula
+\[ \left\langle f(r) \right\rangle = \int f(r') W(r-r', h) dr,\]
+where $h$ is the smoothing radius and $W(r-r', h)$ is the smoothing function (kernel) for which the following conditions
+should be satisfied:
+\[ \int W(r,h) dr = 1, \qquad   \lim_{h \to 0} W(r,h)=\delta(r)\]
+In this work, we use the known definition of the kernel based on third-power piecewise-spline functions~\cite{Monaghan1992}.	
+
+As the smoothing function $W$ is not equal to zero only in a certain (small) neighborhood of the point with the
+coordinate $r$, the result of interpolation is affected only by those nodes that are located in the neighborhood of
+smoothing of this point. Therefore, it is possible to avoid summation over all known values of the function and to
+perform it only over the neighboring nodes (particles) located at distances smaller than $2h$.
+
+It should be noted that the procedure of sampling all particles in space has a quadratic order of complexity,
+and it is next to impossible to implement it in practice. As the particles arbitrarily move in space and can freely
+mix, the task of effective (time-efficient) searching for the neighboring particles is extremely important for the
+SPH method. One possible approach to solving this problem is to divide the space into cells and to perform
+summation only over particles in the neighboring cells. It should be noted that the mesh constructed for this
+purpose is an auxiliary tool used for accelerating the process of searching for the neighboring particles rather than
+for approximation; therefore, it does not affect the resultant solution, and the SPH method is still a meshless one.
+	
+	In the SPH method, the gas dynamic equations have the form
+	\[  \frac{\partial \rho_i}{\partial t} = - \rho_i \suml_{j=1}^{N} \frac{m_j}{\rho_j} (v_j -  v_i) \nabla W(r_i - r_j,h)
+\]
+\[\frac{\partial v_i}{\partial t} = - \suml_{j=1}^{N} m_j \left ( \frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2} \right) \nabla W(r_i-r_j,h).\]
+
+We use the known definition of the liquid state equation:  
+\[p= \frac{\rho_0 c_0^2}{\gamma p_0} \left[ \left( \frac{\rho}{\rho_0} \right)^{\gamma} - 1 \right],\]
+where  $\gamma = 7.15$, $\rho_0$ and $p_0$ is a reference density and pressure, $c_0$ is a speed of sound (approx 1500 m/s).
+
+			
+\section{Постановка задачи}
 
 В начальный момент времени жидкость представляла собой кубик со стороной 1 см, расположенный на плоскости XY, ось OZ проходит через центр кубика. Внутри жидкости, под верхней гранью, находилась сферическая полость радиуса 1мм, центр которой расположен на оси OZ на расстоянии 2.5 мм от верхней грани куба. Давление в полости оставляло 10000 атм, остальной объем жидкости был при атмосферном давлении.
 
@@ -67,19 +108,12 @@
 На рис. 2 показано развитие процесса в объемном виде. Изображена изоповерхность плотности для «половинки» кубика, построенная по значению 0.55 г/см3, то есть изоповерхность ограничивает область, в которой плотность среды больше или равна заданной. Видно, что среда, разлетаясь, теряет связность и распадается на отдельные фрагменты. Дальнейшее развитие процесса приводит к распылению частиц и окончательному разрушению среды.
 
 
-\section{Постановка задачи}
 
 
-\section{SPH-метод}
+
+\section{Результаты}
        
-	Метод гладких (сглаженных) частиц (Smoothed Particle Hydrodynamics - SPH) --- бессеточный лагранжевый численный метод для расчетов процессов интенсивного динамического нагружения тел, в особенности, когда имеет место существенное изменение топологии моделируемых объектов (разлет вещества).
 
-        Интерполяции функции $f$  и ее производной в SPH-методе выглядят следующим образом:
-\[ \langle f(\bar{r}) \rangle = \sum_{i=1}^{N} \frac{m_i}{\rho(\bar{r}_i)}  f(\bar{r_i}) W(\bar{r} -  \bar{r_i},h) \]
-
-\[ \langle \nabla f(\bar{r}) \rangle = \sum_{i=1}^{N} \frac{m_i}{\rho(\bar{r}_i)}  f(\bar{r_i}) \nabla W(\bar{r} -  \bar{r_i},h) \]
-
-    Здесь $W(\bar{r},h)$ --- сглаживающая  функция (ядро), $h$~---  радиус сглаживания.
 		
 
 
