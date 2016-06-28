@@ -1,5 +1,5 @@
-% \documentclass[12pt,a4paper,draft]{article}
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper,draft]{article}
+% \documentclass[12pt,a4paper]{article}
 
 \setlength{\textwidth}{170mm} %ширина текста 6in=152mm
 \setlength{\textheight}{255mm}
@@ -35,7 +35,7 @@
 \newcommand{\suml}{\sum\limits}
 \newcommand{\intl}{\int\limits}
 
-\title{Simulation of liquid cube  fracture with SPH}
+\title{Simulation of liquid cube fracture with SPH}
 \author{M N Davydov}
 \date{Lavrentyev Institute of Hydrodynamics of the Siberian Branch of the Russian Academy of Sciences // davydov@hydro.nsc.ru}
 
@@ -46,12 +46,17 @@
 
 
 \begin{abstract}
-В работе численно исследуется задача о разрушении жидкого кубика, внутри которого имеется полость с высоким давлением, с использованием метода SPH (Smoothed Particle Hydrodynamics)~\cite{Monaghan2005}.  Численное моделирование показывает что распространение  ударной волны от растущей полости и ее отражение от стенок приводит к релаксации поля давления и дальнейшему инерционному разлету среды. Показана деформация и рост полости и формирование выброса на верхней грани кубика.
+The dynamics of fracture of liquid cube with high-pressure cavity is studied numerically in a three-dimensional formulation using the Smoothed Particle Hydrodynamics method (SPH)~\cite{Monaghan2005}.  It is shown that the propogation of SW from growing cavity and reflection from the free side is due to relaxation of tensile stresses in the liquid volume and formation of quasistationary mass-velocity field which provides fracture of the fluid. 
 \end{abstract}
 
 \section{Introduction}
 
-Известно что разрушение жидкостей носит кавитационный характер и связано с наличием большого количества пузырьков газа~\cite{Davydov2012a}. Характерным примером подобного процесса является выброс магматического расплава из канала вулкана при его извержении. Обычные численные методы, основанные на конечных разностях, не в состоянии решить подобные задачи, следовательно требуется использовать методы, способные провести моделирование течений как в области со сложной изменяющейся геометрией	так и меняющейся топологией самого течения. В данной работе рассматривается модельная задача о подводном взрыве и разрушении жидкого кубика с использованием метода SPH. 
+The problem of liquid breakdown in intense rarefaction waves is directly related to the
+notion of strength, which does not have a precise and clear definition in the mechanics of liquids under dynamic
+loading, unlike in solid mechanics~\cite{DavydovKedrinskii2008}. A typical examples of this process is the ejection fraction of magmatic melt from the channel of the volcano during the exposive eruption~\cite{Davydov2012a} or the formation of sultans out on the free surface at shallow underwater explosions.
+
+
+Numerical methods based on finite differences, unable to solve such problems, therefore it is  required to use methods that can simulation of flows in the complex variable geometry region. In this paper, a model problem of an underwater explosion in the cube of pure (one-phase) liquid using the SPH method  is considered.
 
 \section{SPH method}
 
@@ -93,59 +98,61 @@ We use the known definition of the liquid state equation:
 where  $\gamma = 7.15$, $\rho_0$ and $p_0$ is a reference density and pressure, $c_0$ is a speed of sound (approx 1500 m/s).
 
 			
-\section{Постановка задачи}
+\section{Results of numerical simulations}
 
-В начальный момент времени жидкость представляла собой кубик со стороной 1 см, расположенный на плоскости XY, ось OZ проходит через центр кубика. Внутри жидкости, на расстоянии 2.5 мм от верхней грани куба, находилась сферическая полость радиуса 1мм, центр которой расположен на оси OZ. Давление в полости оставляло 10000 атм, остальной объем жидкости был при атмосферном давлении. На Рис.~\ref{P-Vel-1}-\ref{P-Vel-25} показано распределение давления в узлах и скоростей частиц в центральном сечении кубика (плоскость $y=0$).
 
+Initially, the liquid was a cube with sides of $1$~cm, located on the $XY$ plane, $OZ$ axis passes through the center of the cube. Inside the liquid, at a distance of $2.5$~mm from the top side of the cube, was spherical cavity radius of $1$~mm, the center of which is located on the axis $OZ$. The pressure in the cavity was $10000$~atm, the rest of the liquid at atmospheric pressure $p_0$. 
+Figure~\ref{P-Vel-1}--\ref{P-Vel-25} shows the distribution of pressure and particle velocities in the central section of the cube (the plane $y=0$).
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{P-1.eps}\includegraphics[width=0.4\textwidth]{Vel-1.eps}
 \end{center}
-\caption{\label{P-Vel-1} Распределение давления и скорости в центральном сечении кубика в момент времени 1 мкс}
+\caption{\label{P-Vel-1} Distribution of pressure and particle velocities in the central section of the cube ($1$~$\mu$s)}
 \end{figure}
 
-От полости высокого давления распространяется ударная волна, амплитуда которой естественно уменьшается по мере распространения. В указанный момент времени волна подходит в верхней грани кубика, начинается процесс отражения (Рис.~\ref{P-Vel-1}). Ближний к полости слой жидкости приходит в движение, на графике  становятся заметны скорости частиц (частицы в которых $\vec{v} =0$ не показаны). Хорошо видно что распределение скоростей симметрично относительно полости. 
-
+From the high-pressure cavity a shock wave propagates, whose amplitude decreases as naturally decreases as it propagates. 
+During this point in time the wave fits into the top of the cube, begins a process of reflection (Fig.~\ref{P-Vel-1}). 
+Near to the cavity layer of liquid is start to moving, on the figure velocity of particles becomes a visible (particles in which $\vec{v} = 0$ is not shown). It is clearly seen that the velocity distribution is symmetric with respect to the cavity.
+ 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{P-5.eps}\includegraphics[width=0.4\textwidth]{Vel-5.eps}
 \end{center}
-\caption{\label{P-Vel-5} Распределение давления и скорости в центральном сечении кубика в момент времени 5 мкс}
+\caption{\label{P-Vel-5} Distribution of pressure and particle velocities in the central section of the cube ($5$~$\mu$s)}
 \end{figure}
 
-В дальнейшем волна доходит до краев кубика и отражается от его границ, сначала это происходит на боковой грани, затем на нижней (Рис.~\ref{P-Vel-5}). К этому времени верхняя грань заметно деформировалась, сдвинувшись вверх. Почти все частицы пришли в движение, видно что частицы на границе полости <<толкают>> остальные частицы.
+
+The next picture (Fig.~\ref{P-Vel-5}) shows that the wave reaches the faces of the cube and is reflected from its borders, at first it occurs on the side face, then on the bottom. By this time, the upper bound is significantly deformed, curling up. 
+Almost all particles are in motion, it is clear that the particles at the boundary of the cavity ``push'' other particles.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{P-25.eps}\includegraphics[width=0.4\textwidth]{Vel-25.eps}
 \end{center}
-\caption{\label{P-Vel-25} Распределение давления и скорости в центральном сечении кубика в момент времени 25 мкс}
+\caption{\label{P-Vel-25} Distribution of pressure and particle velocities in the central section of the cube ($25$~$\mu$s)}
 \end{figure}
 
-Через несколько десятков микросекунд поле давления практически релаксирует, только в отдельных частицах давление больше $p_0$, а набравшие скорость частицы продолжают разлетаться по инерции, тем самым моделируя разрушение среды (Рис.~\ref{P-Vel-25}). Становятся заметными деформации боковых и нижней граней кубика. Распределение частиц показывает что внутри кубика формируются зоны разрежения, рост которых приведет к разрушению среды на отдельные фрагменты. 
 
-
-
+After a few tens of microseconds pressure field substantially relaxes, only individual particles have the greater pressure greater $p_0$, and scored the particle velocity continues to scatter out of inertia, thereby simulating the fraction of the liquid (Fig.~\ref{P-Vel-25}). One clearly see a deformation of the side and bottom faces of the cube. The particle size distribution shows that inside a cube formed low-density zones, which lead to the growth medium fracture into fragments.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{3D-1.eps} \hfill \includegraphics[width=0.4\textwidth]{3D-2.eps}
 \end{center}
-\caption{\label{3D-1} Изоповерхность $\rho=0.45$ $\text{g}/\text{cm}^3$ для половины кубика в моменты времени 500 и 3000 мкс}
+\caption{\label{3D-1} Isosurface $\rho=0.45$ $\text{g}/\text{cm}^3$ for the 
+half cube in times $500$ and $3000$~$\mu$s}
 \end{figure}
 
-На Рис.~\ref{3D-1} показано развитие процесса в объемном виде. Изображена изоповерхность плотности для «половинки» кубика, построенная по значению 0.45 г/см3, то есть изоповерхность ограничивает область, в которой плотность среды больше или равна заданной. Хорошо заметно, что к моменту времени 300 мкс (Рис.~\ref{3D-1}) полость расширилась в несколько раз, «вытянулась» вверх, выталкивая слои жидкости, образующие верхнюю грань кубика. Нижняя и боковые грани куба деформировались незначительно, а на верхней грани формируется заметная выпуклость, появляется отверстие. 
-
-В дальнейшем на верхней грани кубика формируется вертикальная струя жидкости, которая постепенно разрушается. На боковых и нижней гранях, образуются отдельные отлетающие слои, где разрушение пока не настолько сильно выражено. В дальнейшем и на этих участках будет происходить разрушение жидкости и возникновение отколовшихся от основного объема «слоев». Видно, что среда, разлетаясь, теряет связность и распадается на отдельные фрагменты. Дальнейшее развитие процесса приводит к распылению частиц и окончательному разрушению среды.
-
-Необходимо отметить, что SPH частицы, отлетая друг от друга на расстояние, большее чем радиус сглаживания, перестают влиять друг на друга, что можно интерпретировать как разрушение среды~\cite{DavydovKedrinskii2013}. Так к моменту времени 300 мкс частицы, ранее расположенные над полостью, фактически распылились, и в верхней части объема образовалось отверстие.
+Figure~\ref{3D-1} shows 
+the development of process in 3D view, it is isosurface of density for the half of the cube, build on the value of $0.45$ $\text{g}/\text{cm}^3$. It means  that isosurface bounds the area in which the density of the liquid is greater than or equal to the set. Well clearly that by the time $500$~$\mu$s (Fig.~\ref{3D-1}a) cavity has expanded several times, ``stretched'' up, pushing the liquid layer forming the top face of the cube. Bottom and side faces of the cube slightly deformed and marked convexity is formed on the upper face, a hole appears.
 
 
+It should be noted that the same liquid particles spreads to distances greater than the smoothing radius, which means the loss of bonding in the SPH formulation and is interpreted as the medium fracture~\cite{DavydovKedrinskii2013}.
 
-
-
-
+In the future, the vertical jet of liquid is formed on the top face of the cube, which gradually destroyed. Flying off individual spalls are formed on the side and bottom faces, where the destruction is not so strongly expressed. 
+In the future and in these areas the destruction of the liquid will occur and the emergence of a breakaway from the main volume of "layers". It is evident that the environment, flying away, loses consistency and disintegrates into fragments.
+Further development of the process leads to the dissipation of the particles and the final destruction of the liquid.
 
 \section{Заключение}
 
