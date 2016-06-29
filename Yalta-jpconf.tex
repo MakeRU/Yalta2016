@@ -1,48 +1,13 @@
-\documentclass[12pt,a4paper,draft]{article}
-% \documentclass[12pt,a4paper]{article}
-
-\setlength{\textwidth}{170mm} %ширина текста 6in=152mm
-\setlength{\textheight}{255mm}
-\setlength{\oddsidemargin}{5mm} %расстояние между левым краем листа и левым краем
-                                %текста на правой странице минус 1in
-\setlength{\topmargin}{-20mm} %расстояние между верхним краем листа и верхним
-                            %колонтитулом минус 1in
-%\footheight 4mm %высота нижнего колонтитула
-%\footskip 5mm %расстояние между нижним краем текста и нижнем краем
-               %нижнего колонтитула
-
-
-%\usepackage[cp1251]{inputenc}
-%\usepackage[russian]{babel}
-%\usepackage{srcltx}
-
-\usepackage{amsmath,bm}
-
-\usepackage{mathtext}
-%\usepackage[small,centerlast]{caption2}
-%\renewcommand{\captionlabeldelim}{.}
-\usepackage{indentfirst}
-\usepackage{amssymb}
-%\usepackage{natbib}
-\usepackage{footnote}
-\usepackage{afterpage}
-\usepackage{cite}
-
-\usepackage[dvips]{graphicx,color}
-%\usepackage{graphicx}
-\graphicspath{{Figures/}}
-
-\newcommand{\suml}{\sum\limits}
-\newcommand{\intl}{\int\limits}
-
-\title{Simulation of liquid cube fracture with SPH}
-\author{M N Davydov}
-\date{Lavrentyev Institute of Hydrodynamics of the Siberian Branch of the Russian Academy of Sciences // davydov@hydro.nsc.ru}
-
-
+\documentclass[a4paper]{jpconf}
+\usepackage{graphicx}
 \begin{document}
+\title{Simulation of liquid cube fracture with SPH}
 
-\maketitle
+\author{M N Davydov}
+
+\address{Lavrentyev Institute of Hydrodynamics of the Siberian Branch of the Russian Academy of Sciences}
+
+\ead{davydov@hydro.nsc.ru}
 
 
 \begin{abstract}
@@ -89,9 +54,9 @@ purpose is an auxiliary tool used for accelerating the process of searching for 
 for approximation; therefore, it does not affect the resultant solution, and the SPH method is still a meshless one.
 	
 	In the SPH method, the gas dynamic equations have the form
-	\[  \frac{\partial \rho_i}{\partial t} = - \rho_i \suml_{j=1}^{N} \frac{m_j}{\rho_j} (v_j -  v_i) \nabla W(r_i - r_j,h)
+	\[  \frac{\partial \rho_i}{\partial t} = - \rho_i \sum\limits_{j=1}^{N} \frac{m_j}{\rho_j} (v_j -  v_i) \nabla W(r_i - r_j,h)
 \]
-\[\frac{\partial v_i}{\partial t} = - \suml_{j=1}^{N} m_j \left ( \frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2} \right) \nabla W(r_i-r_j,h).\]
+\[\frac{\partial v_i}{\partial t} = - \sum\limits_{j=1}^{N} m_j \left ( \frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2} \right) \nabla W(r_i-r_j,h).\]
 
 We use the known definition of the liquid state equation:  
 \[p= p_0 + \frac{\rho_0 c_0^2}{\gamma} \left[ \left( \frac{\rho}{\rho_0} \right)^{\gamma} - 1 \right],\]
@@ -140,33 +105,30 @@ After a few tens of microseconds pressure field substantially relaxes, only indi
 \begin{center}
 \includegraphics[width=0.4\textwidth]{3D-1.eps} \hfill \includegraphics[width=0.4\textwidth]{3D-2.eps}
 \end{center}
-\caption{\label{3D-1} Isosurface $\rho=0.45$ $\text{g}/\text{cm}^3$ for the 
+\caption{\label{3D-1} Isosurface $\rho=0.45$ g/cm$^3$ for the 
 half cube in times $500$ and $3000$~$\mu$s}
 \end{figure}
 
 Figure~\ref{3D-1} shows 
-the development of process in 3D view, it is isosurface of density for the half of the cube, build on the value of $0.45$ $\text{g}/\text{cm}^3$. It means  that isosurface bounds the area in which the density of the liquid is greater than or equal to the set. Well clearly that by the time $500$~$\mu$s (Fig.~\ref{3D-1}a) cavity has expanded several times, ``stretched'' up, pushing the liquid layer forming the top face of the cube. Bottom and side faces of the cube slightly deformed and marked convexity is formed on the upper face, a hole appears.
+the development of process in 3D view, it is isosurface of density for the half of the cube, build on the value of $0.45$ g/cm$^3$. It means  that isosurface bounds the area in which the density of the liquid is greater than or equal to the set. Well clearly that by the time $500$~$\mu$s (Fig.~\ref{3D-1}a) cavity has expanded several times, ``stretched'' up, pushing the liquid layer forming the top face of the cube. Bottom and side faces of the cube slightly deformed and marked convexity is formed on the upper face, a hole appears.
 
 
 It should be noted that the same liquid particles spreads to distances greater than the smoothing radius, which means the loss of bonding in the SPH formulation and is interpreted as the medium fracture~\cite{DavydovKedrinskii2013}.
 
-In the future, the vertical jet of liquid is formed on the top face of the cube, which gradually destroyed. Flying off individual spalls are formed on the side and bottom faces, where the destruction is not so strongly expressed. 
+In the future, the vertical jet of liquid is formed on the top face of the cube, which gradually destroyed. Flying off individual spalls are formed on the side and bottom faces, where the destruction is not so strongly expressed (Fig.~\ref{3D-1}b).
 In the future and in these areas the destruction of the liquid will occur and the emergence of a breakaway from the main volume of "layers". It is evident that the environment, flying away, loses consistency and disintegrates into fragments.
 Further development of the process leads to the dissipation of the particles and the final destruction of the liquid.
 
 \section{Conclusion}
 
-The results of numerical modeling show that the SPH method can be used to study the dynamics of the state of a  flow of a medium with a liquid cube fracture. The results of the numerical analysis of the processes of formation and dynamics of the structure of spalling zones after reflection of the shock wave generated by an underwater explosion from the free surface are presented. A numerical study of the 
-dynamics of the liquid cube under shock-wave loading shows that the shock wave reflected from the free
-surface leads to the relax of a high pressure and subsequent decomposition into individual fragments and clusters
-of almost free particles.
+The results of the numerical analysis of the processes of formation and dynamics of the structure of spalling zones after reflection of the shock wave generated by an underwater explosion from the free surface are presented. It shows that the SPH method can be used to study the dynamics of the liquid cube fracture.  A numerical study shows that the shock wave reflection from the free surface leads to relax of a high pressure and subsequent decomposition into individual fragments and clusters of almost free particles.
 
-This work was supported by the
-Russian Foundation for Basic Research (Grant No. 15-05-03336).
+\ack{This work was supported by the
+Russian Foundation for Basic Research (Grant No. 15-05-03336).}
 
-
+\section*{References}
 %\bibliographystyle{unsrt}
-\bibliographystyle{gost2008}
+\bibliographystyle{iopart-num}
 \bibliography{d:/Dropbox/BibtexBase/Work}
 
 
