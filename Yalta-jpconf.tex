@@ -11,7 +11,7 @@
 
 
 \begin{abstract}
-The dynamics of fracture of liquid cube with high-pressure cavity is studied numerically in a three-dimensional formulation using the Smoothed Particle Hydrodynamics method (SPH).  It is shown that the propogation of SW from growing cavity and reflection from the free side is due to relaxation of tensile stresses in the liquid volume and formation of quasistationary mass-velocity field which provides fracture of the fluid. 
+The dynamics of fracture of liquid cube with high-pressure cavity is studied numerically in a three-dimensional formulation using the Smoothed Particle Hydrodynamics method (SPH).  It is shown that the propogation of shock wave from growing cavity and reflection from the free side is due to relaxation of tensile stresses in the liquid volume and formation of quasistationary mass-velocity field which provides fracture of the fluid. 
 \end{abstract}
 
 \section{Introduction}
@@ -21,7 +21,7 @@ notion of strength, which does not have a precise and clear definition in the me
 loading, unlike in solid mechanics~\cite{DavydovKedrinskii2008}. A typical examples of this process is the ejection fraction of magmatic melt from the channel of the volcano during the exposive eruption~\cite{Davydov2012a} or the formation of sultans out on the free surface at shallow underwater explosions.
 
 
-Numerical methods based on finite differences, unable to solve such problems, therefore it is  required to use methods that can simulation of flows in the complex variable geometry region. In this paper, a model problem of an underwater explosion in the cube of pure (one-phase) liquid using the SPH method~\cite{Monaghan2005}  is considered.
+Numerical methods based on finite differences are unable to solve such problems, therefore it is  required to use methods that can simulate of flows in the complex variable geometry region. In this paper, a model problem of an underwater explosion in the cube of pure (one-phase) liquid using the SPH method~\cite{Monaghan2005}  is considered.
 
 \section{SPH method}
 
@@ -29,7 +29,7 @@ The smoothed particle hydrodynamics (SPH) method~\cite{Monaghan1992,Monaghan2005
 method used to calculate flow structures with an unknown free boundary, in particular, high-velocity processes in
 media with the modeled object topology appreciably changed under intense dynamic loading.
 
-In this method, $N$ spherical particles are placed into the modeled physical space. Each particle has a
+In this method $N$ spherical particles are placed into the modeled physical space. Each particle has a
 mass $m_i$, internal energy $e_i$, and velocity $\vec{v}_i$. The particles move in accordance with the laws of mechanics. If these
 physical quantities are known at a certain time at all points $j = 1,\ldots{},N$ to which $N$ particles are placed, i.e., if
 a certain function $f(r_j)$ is specified, then its value at an arbitrary point of the modeled space can be obtained by
@@ -38,14 +38,14 @@ means of discretization of the interpolation formula
 where $h$ is the smoothing radius and $W(r-r', h)$ is the smoothing function (kernel) for which the following conditions
 should be satisfied:
 \[ \int W(r,h) dr = 1, \qquad   \lim_{h \to 0} W(r,h)=\delta(r)\]
-In this work, we use the known definition of the kernel based on third-power piecewise-spline functions~\cite{Monaghan1992}.	
+In this work we use the known definition of the kernel based on third-order piecewise-spline functions~\cite{Monaghan1992}.	
 
 As the smoothing function $W$ is not equal to zero only in a certain (small) neighborhood of the point with the
 coordinate $r$, the result of interpolation is affected only by those nodes that are located in the neighborhood of
 smoothing of this point. Therefore, it is possible to avoid summation over all known values of the function and to
 perform it only over the neighboring nodes (particles) located at distances smaller than $2h$.
 
-It should be noted that the procedure of sampling all particles in space has a quadratic order of complexity,
+It should be noted that the procedure of sampling of all particles in space has a quadratic order of complexity,
 and it is next to impossible to implement it in practice. As the particles arbitrarily move in space and can freely
 mix, the task of effective (time-efficient) searching for the neighboring particles is extremely important for the
 SPH method. One possible approach to solving this problem is to divide the space into cells and to perform
@@ -53,20 +53,20 @@ summation only over particles in the neighboring cells. It should be noted that 
 purpose is an auxiliary tool used for accelerating the process of searching for the neighboring particles rather than
 for approximation; therefore, it does not affect the resultant solution, and the SPH method is still a meshless one.
 	
-	In the SPH method, the gas dynamic equations have the form
+	In the SPH method the gas dynamic equations have the form
 	\[  \frac{\partial \rho_i}{\partial t} = - \rho_i \sum\limits_{j=1}^{N} \frac{m_j}{\rho_j} (v_j -  v_i) \nabla W(r_i - r_j,h)
 \]
 \[\frac{\partial v_i}{\partial t} = - \sum\limits_{j=1}^{N} m_j \left ( \frac{p_i}{\rho_i^2} + \frac{p_j}{\rho_j^2} \right) \nabla W(r_i-r_j,h).\]
 
 We use the known definition of the liquid state equation:  
 \[p= p_0 + \frac{\rho_0 c_0^2}{\gamma} \left[ \left( \frac{\rho}{\rho_0} \right)^{\gamma} - 1 \right],\]
-where  $\gamma = 7.15$, $\rho_0$ and $p_0$ is a reference density and pressure, $c_0$ is a speed of sound (approx 1500 m/s).
+where  $\gamma = 7.15$, $\rho_0$ and $p_0$ is a reference density and pressure, $c_0$ is a speed of sound (approximate 1500 m/s).
 
 			
 \section{Results of numerical simulations}
 
 
-Initially, the liquid was a cube with sides of $1$~cm, located on the $XY$ plane, $OZ$ axis passes through the center of the cube. Inside the liquid, at a distance of $2.5$~mm from the top side of the cube, was spherical cavity radius of $1$~mm, the center of which is located on the axis $OZ$. The pressure in the cavity was $10000$~atm, the rest of the liquid at atmospheric pressure $p_0$. 
+Initially, the liquid is a cube with sides of $1$~cm, located on the $XY$ plane, $OZ$ axis passes through the center of the cube. Inside the liquid, at a distance of $2.5$~mm from the top side of the cube, there is a spherical cavity radius of $1$~mm, the center of which is located on the axis $OZ$. The pressure in the cavity is $10000$~atm, the rest of the liquid is at atmospheric pressure $p_0$. 
 Figure~\ref{P-Vel-1}--\ref{P-Vel-25} shows the distribution of pressure and particle velocities in the central section of the cube (the plane $y=0$).
 
 \begin{figure}
@@ -76,9 +76,9 @@ Figure~\ref{P-Vel-1}--\ref{P-Vel-25} shows the distribution of pressure and part
 \caption{\label{P-Vel-1} Distribution of pressure and particle velocities in the central section of the cube ($1$~$\mu$s)}
 \end{figure}
 
-From the high-pressure cavity a shock wave propagates, whose amplitude decreases as naturally decreases as it propagates. 
-During this point in time the wave fits into the top of the cube, begins a process of reflection (Fig.~\ref{P-Vel-1}). 
-Near to the cavity layer of liquid is start to moving, on the figure velocity of particles becomes a visible (particles in which $\vec{v} = 0$ is not shown). It is clearly seen that the velocity distribution is symmetric with respect to the cavity.
+
+The shock wave propagates from the high-pressure cavity. The amplitude of shock wave decreases as it propagates. 
+Figure \ref{P-Vel-1} shows the begin of reflection the shock wave from the top of the cube at time $1$~$\mu$s. Near to the cavity layer of liquid starts to move. Only particles in which $\vec{v} \neq 0$ is painted on the figure. It is clearly seen that the velocity distribution is symmetric with respect to the cavity.
  
 \begin{figure}
 \begin{center}
@@ -88,7 +88,7 @@ Near to the cavity layer of liquid is start to moving, on the figure velocity of
 \end{figure}
 
 
-The next picture (Fig.~\ref{P-Vel-5}) shows that the wave reaches the faces of the cube and is reflected from its borders, at first it occurs on the side face, then on the bottom. By this time, the upper bound is significantly deformed, curling up. 
+Figure \ref{P-Vel-5} shows that the wave reaches the faces of the cube and is reflected from its borders, at first it occurs on the side face, then on the bottom. By this time, the upper bound is significantly deformed, curling up. 
 Almost all particles are in motion, it is clear that the particles at the boundary of the cavity ``push'' other particles.
 
 \begin{figure}
@@ -99,7 +99,7 @@ Almost all particles are in motion, it is clear that the particles at the bounda
 \end{figure}
 
 
-After a few tens of microseconds pressure field substantially relaxes, only individual particles have the greater pressure greater $p_0$, and scored the particle velocity continues to scatter out of inertia, thereby simulating the fraction of the liquid (Fig.~\ref{P-Vel-25}). One clearly see a deformation of the side and bottom faces of the cube. The particle size distribution shows that inside a cube formed low-density zones, which lead to the growth medium fracture into fragments.
+After a few tens of microseconds pressure field substantially relaxes, only individual particles have the pressure greater then $p_0$, and scored the particle velocity continues to scatter out of inertia, thereby simulating the fraction of the liquid (Fig.~\ref{P-Vel-25}). One clearly sees a deformation of the side and bottom faces of the cube. The particle size distribution shows that inside a cube formed low-density zones, which lead to the growth medium fracture into fragments.
 
 \begin{figure}
 \begin{center}
@@ -110,7 +110,7 @@ half cube in times $500$ and $10000$~$\mu$s}
 \end{figure}
 
 Figure~\ref{3D-1} shows 
-the development of process in 3D view, it is isosurface of density for the half of the cube, build on the value of $0.45$ g/cm$^3$. It means  that isosurface bounds the area in which the density of the liquid is greater than or equal to the set. Well clearly that by the time $500$~$\mu$s (Fig.~\ref{3D-1}a) cavity has expanded several times, ``stretched'' up, pushing the liquid layer forming the top face of the cube. Bottom and side faces of the cube slightly deformed and marked convexity is formed on the upper face, a hole appears.
+the development of process in 3D view, it is an isosurface of the density field for the half of the cube, the value of the density is $\rho^* = 0.45$ g/cm$^3$. It means  that the isosurface bounds the area where the density of the liquid is greater than or equal to the $\rho^*$. Clearly that by the time $500$~$\mu$s (Fig.~\ref{3D-1}a) the cavity has increased in size by several times, ``stretched'' up and deformed the top face of the cube, the hole is formed. Bottom and side faces of the cube is slightly deformed. 
 
 
 It should be noted that the same liquid particles spreads to distances greater than the smoothing radius, which means the loss of bonding in the SPH formulation and is interpreted as the medium fracture~\cite{DavydovKedrinskii2013}.
