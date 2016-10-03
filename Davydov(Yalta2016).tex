@@ -1,0 +1,303 @@
+%\documentclass[draft,10pt]{beamer}
+\documentclass[10pt]{beamer}
+
+\usepackage[cp1251]{inputenc}
+\usepackage[russian]{babel}
+%\usepackage{movie15}
+%\usepackage{multimedia}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{animate}
+
+\newcommand{\suml}{\sum\limits}
+\newcommand{\intl}{\int\limits}
+% выбор темы
+%\usetheme{CambridgeUS}
+\usetheme{Frankfurt}
+\useoutertheme{shadow}
+
+
+
+\begin{document}
+% титульная страница
+%\addbibresource{Work.bib}
+
+\title{Моделирование разрушения жидкого кубика методом SPH}
+\date{Институт гидродинамики им. М. А. Лаврентьева СО РАН}
+\author{Давыдов М.Н.}
+
+\begin{frame}
+\begin{flushright}
+\alert{Теплофизика и физическая гидродинамика - 2016 \\ Ялта, Крым, 19-25 сентября}
+\end{flushright}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{SPH метод (Smoothed Particles Hydrodynamics)}
+
+\begin{block}{} 
+\begin{center}
+\alert{SPH --- бессеточный лагранжевый численный метод.}
+\end{center}
+\end{block}
+
+Основные области применения:
+\begin{itemize}
+	\item Высокоскоростное соударение.
+	\item Интенсивное динамическое нагружение.
+	\item Существенное изменение топологии (разлет, перемешивание).
+	\item Сильные деформации границ расчетной области.
+	\item Изменение связности и <<перехлест>> расчетных областей.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Аппроксимация функций и производных ядром (kernel)}
+
+Функция $f(r)$ известна в $N$ точках области $\Omega$. $i=1,2,\ldots{},N$. $r_i=(x_1,\ldots{},x_D)$. D~--- размерность пространства.
+
+$W$~--- сглаживающее ядро (h --- длина сглаживания).
+\[ \intl_{\Omega} W (r-r',h)dr' = 1, \qquad  \lim_{h \to 0} W (r-r',h) = \delta(r-r')\]
+
+\begin{block}{} \alert{\[ \left\langle f(r) \right\rangle = \intl_{\Omega} f(r') W (r-r',h)dr'\]} 
+ \alert{ \[ \left\langle \nabla f(r) \right\rangle = - \intl_{\Omega}  f(r') \nabla W (r-r',h) dr'  \] }
+\end{block}
+Данная аппроксимация имеет порядок $O(h^2)$.\footnote{Monaghan J. J. ``Smoothed particle hydrodynamics'' (2005)}
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Аппроксимация частицами}
+
+\begin{figure}[htb]
+          \centering
+         % \includegraphics[width=0.3\textwidth]{Area.eps}  \hspace{2cm}
+          \includegraphics[width=0.3\textwidth]{Gauss}
+
+      \end{figure}
+
+С каждой частицей соотносится некоторый объем среды $V_i$ массы $m_i$ ($\rho_i = m_i/V_i$). Замена 
+интеграла на сумму по частицам:
+
+\begin{block}{}
+\alert{\[ \langle f(r) \rangle = \suml_{i=1}^{N} \frac{m_i}{\rho_i} f(r_i) W(r -  r_i,h) \]
+\[ \langle \nabla f(r) \rangle = - \suml_{i=1}^{N} \frac{m_i}{\rho_i}  f(r_i) \nabla W(r-r_i,h) \]
+}
+\end{block}
+ 
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Основные уравнения}
+
+%\begin{block}{Уравнение неразрывности:}
+%\alert{\[  \frac{\partial \rho_i}{\partial t} = - \rho_i \suml_{j=1}^{N} %\frac{m_j}{\rho_j} (v_j -  v_i) \nabla W(r_i - r_j,h)
+%\]}
+%\end{block}
+
+
+\begin{block}{Физический смысл плотности:}
+\alert{\[  \rho_i = \suml_{j=1}^{N} m_j W(\bar{r_i} - \bar{r_j},h)
+\]}
+\end{block}
+\pause 
+\begin{block}{Уравнение импульсов:} 
+\alert{\[ \frac{d \bar{v_i}}{dt} = - \suml_{j=1}^{N} m_j \left( \frac{p_i}{\rho_i^2} +  \frac{p_j}{\rho_j^2} + \Pi_{ij}\right) \nabla W(\bar{r_i} -  \bar{r_j},h)
+\]}
+\end{block}
+
+%где $\Pi_{ij}$ --- исскуственная вязкость
+
+%\[ \Pi_{ij} = \left\{
+%                 \begin{array}{ll}
+%                   \frac{-\alpha c_{ij}\mu_{i,j} + \beta \mu^2_{i,j}}{p_{ij}}, & %\hbox{$(\bar{v_j} -  \bar{v_i}) \cdot (\bar{r_j} -  \bar{r_i}) < 0$;} \\
+%                   0, & \hbox{иначе.}
+%                 \end{array}
+%               \right.
+%\]
+\pause 
+\begin{block}{Уравнение состояния:} 
+\alert{\[ p= p_0 + \frac{c_0^2 \rho_0}{n} \left[ \left(\frac{\rho}{\rho_0}\right)^n -1  \right]  \]}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Постановка задачи}
+
+\begin{figure}[htb]
+\includegraphics[width=0.3\paperwidth]{Cube_int}
+\end{figure}
+
+\begin{itemize}
+	\item Давление в кубе --- $p_0=1$ атм.
+	\item Давление в полости --- $p=10000$ атм.
+	\item Сторона куба 1 см. 
+	\item Диаметр полости --- 2 мм.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Центральное сечение кубика (1 и 3 мкс)}
+
+\begin{figure}[htb]
+          \centering
+         \includegraphics[width=0.54\textwidth]{P-1} 
+          \includegraphics[width=0.37\textwidth]{Vel-1}
+
+      \end{figure}
+\pause 			
+\begin{figure}[htb]
+          \centering
+         \includegraphics[width=0.54\textwidth]{P-5}  
+          \includegraphics[width=0.37\textwidth]{Vel-5}
+
+      \end{figure}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Центральное сечение кубика (25 и 300 мкс)}
+
+\begin{figure}[htb]
+          \centering
+         \includegraphics[width=0.54\textwidth]{P-25} 
+          \includegraphics[width=0.37\textwidth]{Vel-25}
+
+      \end{figure}
+\pause 			
+\begin{figure}[htb]
+          \centering
+         \includegraphics[width=0.54\textwidth]{P-30}  
+          \includegraphics[width=0.37\textwidth]{Vel-30}
+
+      \end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Изоповерхность плотности ($\rho = 0.55$ г/см$^3$)}
+\begin{center}
+\animategraphics[controls, width=0.9\textwidth]{3}{Cube}{000}{100}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+
+\frametitle{Моменты времени 0, 3, 7.5 и 10 мс}
+
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=0.28\paperwidth]{Cube0002} \hspace{1cm}
+\includegraphics[width=0.28\paperwidth]{Cube0030} \\ 
+\includegraphics[width=0.28\paperwidth]{Cube0070}\hspace{1cm}
+\includegraphics[width=0.28\paperwidth]{Cube0100}
+\end{center}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Huge \bfseries Благодарю за внимание!
+\end{center}
+\end{frame}
+
+
+\end{document}
+
+\begin{frame}
+
+\frametitle{Кубик с полостью высокого давления (0, 0.25, 1.4, 2 с)}
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=0.3\paperwidth]{Expl0000}
+\pause \includegraphics[width=0.3\paperwidth]{Expl0250} \\ 
+\pause \includegraphics[width=0.3\paperwidth]{Expl1400}
+\pause \includegraphics[width=0.3\paperwidth]{Expl2260}
+\end{center}
+
+\end{figure}
+
+\begin{frame}
+
+%\begin{frame}
+%\frametitle{Жидкий кубик с полостью высокого давления (video)}
+%\begin{figure}[ht]
+% \includemovie[poster, text={\small(Кубик)}]{0.7\linewidth}{0.7\linewidth}{Hole.avi}
+%\end{figure}
+%\end{frame}
+
+\begin{frame}
+\animategraphics[controls,width=5.6cm]{1}{Cube}{0000}{0100}
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Изоповерхность плотности (0, 0.5, 1, 2 с)}
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[width=0.4\paperwidth]{Hole3D000}
+\pause \includegraphics[width=0.4\paperwidth]{Hole3D050} \\
+\pause \includegraphics[width=0.4\paperwidth]{Hole3D100}
+\pause \includegraphics[width=0.4\paperwidth]{Hole3D200}
+\end{center}
+
+\end{figure}
+
+\end{frame}
+
+%\begin{frame}
+%\frametitle{Кубик с областями высокого давления (video)}
+%\begin{figure}[ht]
+% \includemovie[poster, text={\small(Кубик)}]{0.8\linewidth}{0.6\linewidth}{Ch.avi}
+%\end{figure}
+%\end{frame}
+
+
+
+
+\end{document}
+
+
+\begin{frame}
+\frametitle{Рост капли}
+
+     К моменту времени 200 мкс,  можно наблюдать изменение размеров капли. К этому времени становится заметен отрыв капли от мембраны, а пустота в центре увеличилась за счет объединения мелких областей, обособленных в ранние моменты времени.
+
+      \begin{figure}[htb]
+          \centering
+          \includegraphics[width=0.4\textwidth]{Drop200.eps}          
+					\includegraphics[width=0.58\textwidth]{C200.eps}
+        \end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}
+
+\frametitle{Выводы}
+\begin{itemize}
+  \item Показано, что метод SPH позволяет провести исследование структуры течения кавитирующей  среды с высокой концентрацией газовой фазы и описать процесс инверсии ее двухфазного состояния --- переход от кавитирующей жидкости к системе газ-частицы.
+  \item Численный анализ динамики состояния полусферической  капли в процессе ее ударно-волнового нагружения показал, что фокусировка отраженных от свободной поверхности капли ударных волн приводит к формированию в окрестности центра капли плотного, быстро расширяющегося кавитационного кластера, что приводит к внутреннему <<кавитационному>> взрыву капли.
+  \item Полученные численные результаты в задаче о декомпрессии столба жидкости позволяют говорить о формировании зон разрушения среды.
+\end{itemize}
+
+\end{frame}
+
+
